@@ -1,10 +1,10 @@
 # blob-server
 
 для тестового задания понадобится
-go - https://golang.org/dl/
-mongodb - https://www.mongodb.org/downloads
-git+ акк в github.com(чтобы туда потом выложить)
-любой редактор (мы используем этот https://www.jetbrains.com/idea/download/ + плюс к нему плагин под го https://github.com/go-lang-plugin-org там есть фактически все что нужно для автокоплит, переход к определению, просмотр доки, запуск и тд)
+* go - https://golang.org/dl/
+* mongodb - https://www.mongodb.org/downloads
+* git+ акк в github.com(чтобы туда потом выложить)
+* любой редактор (мы используем этот https://www.jetbrains.com/idea/download/ + плюс к нему плагин под го https://github.com/go-lang-plugin-org там есть фактически все что нужно для автокоплит, переход к определению, просмотр доки, запуск и тд)
 
 # Задание
 
