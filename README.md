@@ -18,3 +18,4 @@ GET /api/v1/file - list files
 DELETE /api/v1/file/:id - remove
 ```
 
+драйвер под монгу на го http://godoc.org/gopkg.in/mgo.v2
