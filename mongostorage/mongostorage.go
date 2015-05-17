@@ -1,16 +1,16 @@
 package mongostorage
 
 import (
-	"io"
-	"errors"
 	"blob-server/storage"
+	"errors"
 	"gopkg.in/mgo.v2"
 	"gopkg.in/mgo.v2/bson"
+	"io"
 )
 
 type MongoStorage struct {
 	session *mgo.Session
-	gridFs *mgo.GridFS
+	gridFs  *mgo.GridFS
 }
 
 type MongoIdError struct {
@@ -35,12 +35,12 @@ var (
 
 func Start(url string, prefix string) (*MongoStorage, error) {
 	session, err := mgo.Dial(url)
-	if (err != nil) {
+	if err != nil {
 		return nil, err
 	}
 	mongoStorage := &MongoStorage{
 		session: session,
-		gridFs: session.DB("").GridFS(prefix),
+		gridFs:  session.DB("").GridFS(prefix),
 	}
 	return mongoStorage, nil
 }
@@ -63,11 +63,11 @@ func (mongo MongoStorage) Post(reader io.Reader) (string, error) {
 }
 
 func doIdRequest(id string, f func() error) storage.IdRequestError {
-	if (!bson.IsObjectIdHex(id)) {
+	if !bson.IsObjectIdHex(id) {
 		return MongoIdError{ErrInvalidHexId}
 	}
 	err := f()
-	if (err == nil) {
+	if err == nil {
 		return nil
 	} else {
 		return MongoIdError{err}

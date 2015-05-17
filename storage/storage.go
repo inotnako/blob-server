@@ -16,4 +16,3 @@ type Storage interface {
 	GetList() ([]string, error)
 	Delete(id string) IdRequestError
 }
-

@@ -2,14 +2,14 @@ package httpserver
 
 import (
 	"blob-server/storage"
-	"log"
-	"net/http"
 	"encoding/json"
 	"github.com/gorilla/mux"
+	"log"
+	"net/http"
 )
 
 type RequestHandler struct {
-	storage storage.Storage
+	storage     storage.Storage
 	handlerFunc func(storage.Storage, http.ResponseWriter, *http.Request)
 }
 
@@ -19,7 +19,7 @@ func (handler RequestHandler) ServeHTTP(writer http.ResponseWriter, request *htt
 
 func FilePostHandler(storage storage.Storage, writer http.ResponseWriter, request *http.Request) {
 	id, err := storage.Post(request.Body)
-	if (err != nil) {
+	if err != nil {
 		log.Println("File post error: ", err)
 		writer.WriteHeader(http.StatusInternalServerError)
 	} else {
@@ -28,9 +28,9 @@ func FilePostHandler(storage storage.Storage, writer http.ResponseWriter, reques
 }
 
 func writeResponseToIdRequestError(writer http.ResponseWriter, err storage.IdRequestError) {
-	if (err.NotFound()) {
+	if err.NotFound() {
 		writer.WriteHeader(http.StatusNotFound)
-	} else if (err.IllFormed()) {
+	} else if err.IllFormed() {
 		writer.WriteHeader(http.StatusBadRequest)
 	} else {
 		writer.WriteHeader(http.StatusInternalServerError)
@@ -39,7 +39,7 @@ func writeResponseToIdRequestError(writer http.ResponseWriter, err storage.IdReq
 
 func FileGetHandler(storage storage.Storage, writer http.ResponseWriter, request *http.Request) {
 	err := storage.Get(mux.Vars(request)["id"], writer)
-	if (err != nil) {
+	if err != nil {
 		log.Println("File get error: ", err)
 		writeResponseToIdRequestError(writer, err)
 	}
@@ -47,12 +47,12 @@ func FileGetHandler(storage storage.Storage, writer http.ResponseWriter, request
 
 func FileGetListHandler(storage storage.Storage, writer http.ResponseWriter, request *http.Request) {
 	ids, err := storage.GetList()
-	if (err != nil) {
+	if err != nil {
 		log.Println("File get list error: ", err)
 		writer.WriteHeader(http.StatusInternalServerError)
 	} else {
 		json, err := json.Marshal(ids)
-		if (err != nil) {
+		if err != nil {
 			log.Println("JSON marshalling error: ", err)
 			writer.WriteHeader(http.StatusInternalServerError)
 		} else {
@@ -64,13 +64,13 @@ func FileGetListHandler(storage storage.Storage, writer http.ResponseWriter, req
 
 func FileDeleteHandler(storage storage.Storage, writer http.ResponseWriter, request *http.Request) {
 	err := storage.Delete(mux.Vars(request)["id"])
-	if (err != nil) {
+	if err != nil {
 		log.Println("File delete error: ", err)
 		writeResponseToIdRequestError(writer, err)
 	}
 }
 
-func Serve(addr string, storage storage.Storage) (error) {
+func Serve(addr string, storage storage.Storage) error {
 	router := mux.NewRouter()
 
 	router.Handle("/api/v1/file", RequestHandler{storage, FilePostHandler}).Methods("POST")
@@ -86,4 +86,3 @@ func Serve(addr string, storage storage.Storage) (error) {
 
 	return http.ListenAndServe(addr, nil)
 }
-
